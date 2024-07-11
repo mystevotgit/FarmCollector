@@ -130,7 +130,7 @@ The application will be available at http://localhost:8080.
   - Description: Generate a report comparing expected vs actual crop yields for all farms by crop type for a specific season.
 
 ## API Documentation
-Swagger UI is available at http://localhost:8080/swagger-ui/ for detailed API documentation.
+Swagger UI is available at http://localhost:8080/swagger-ui.html/ for detailed API documentation.
 
 Testing
 Unit tests are included for the API endpoints. To run the tests, use:
