@@ -23,7 +23,7 @@ FarmCollector is a Spring Boot application that helps farmers collect and report
 
 ```bash
 git clone https://github.com/mystevotgit/FarmCollector.git
-cd farmcollector
+cd farmCollector
 ```
 
 ### Build and Run the Application
@@ -49,27 +49,92 @@ The application will be available at http://localhost:8080.
   - Method: POST
   - Description: Create a new farm.
   - Request Body:
-  ```agsl
-    {
-       "name": "MyFarm"
-    }
-  ```
-  Field Endpoints
-  Get All Fields
+    ```json
+      {
+        "name": "MyFarm"
+      }
+    ```
+### Field Endpoints
+- Get All Fields
+  - URL: /api/fields
+  - Method: GET
+  - Description: Retrieve all fields.
+  
+- Create Field
+  - URL: /api/fields
+  - Method: POST
+  - Description: Create a new field.
+  - Request Body:
+      ```json
+        {
+          "name": "Field1",
+          "plantingArea": 100.0,
+          "farm": {
+                    "id": 1
+                  }
+        }
+      ```
+### Crop Endpoints
 
-URL: /api/fields
-Method: GET
-Description: Retrieve all fields.
-Create Field
+- Get All Crops
+  - URL: /api/crops
+  - Method: GET
+  - Description: Retrieve all crops.
+  
+- Create Crop
+  - URL: /api/crops
+  - Method: POST
+  - Description: Create a new crop.
+  - Request Body:
+    ```json
+     {
+       "type": "Corn",
+       "expectedProduct": 50.0,
+       "actualProduct": 45.0,
+       "field": {
+                  "id": 1
+                },
+       "season": {
+                   "id": 1
+                 }
+     }
+    ```
+### Season Endpoints
 
-URL: /api/fields
-Method: POST
-Description: Create a new field.
-Request Body:
-    ```bash
-    {
-    "name": "MyFarm"
-    }
+- Get All Seasons
+  - URL: /api/seasons
+  - Method: GET
+  - Description: Retrieve all seasons.
+  
+- Create Season
+  - URL: /api/seasons
+  - Method: POST
+  - Description: Create a new season.
+  - Request Body:
+    ```json
+     {
+       "name": "Spring 2024"
+     }
     ```
 
+### Report Endpoints
+
+- Get Report for Farm by Season
+  - URL: /api/reports/farm/{farmId}/season/{seasonId}
+  - Method: GET
+  - Description: Generate a report comparing expected vs actual crop yields for a specific farm and season.
+  
+- Get Report for Crops by Season
+  - URL: /api/reports/crops/season/{seasonId}
+  - Method: GET
+  - Description: Generate a report comparing expected vs actual crop yields for all farms by crop type for a specific season.
+
+## API Documentation
+Swagger UI is available at http://localhost:8080/swagger-ui/ for detailed API documentation.
+
+Testing
+Unit tests are included for the API endpoints. To run the tests, use:
+```bash
+   mvn test
+```
 
