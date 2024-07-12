@@ -1,56 +1,64 @@
 package com.example.farmCollector.controller;
 
-import com.example.farmCollector.entity.Crop;
-import com.example.farmCollector.repository.CropRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.farmCollector.entity.Field;
+import com.example.farmCollector.entity.Season;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-public class CropControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private CropRepository cropRepository;
-
-    @BeforeEach
-    public void setUp() {
-        cropRepository.deleteAll();
-    }
+public class CropControllerTest extends AbstractControllerTest {
 
     @Test
     public void testGetAllCrops() throws Exception {
-        Crop crop = new Crop();
-        crop.setType("corn");
-        cropRepository.save(crop);
 
-        mockMvc.perform(get("/api/crops"))
+        getMockMvc().perform(get("/api/crops"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[0].type").value("corn"))
-                .andExpect(jsonPath("$.[1]").doesNotHaveJsonPath());
+                .andExpect(jsonPath("$.[0].type").value("Corn"))
+                .andExpect(jsonPath("$.[0].quantity").value("100.0"))
+                .andExpect(jsonPath("$.[0].operation").value("planted"))
+                .andExpect(jsonPath("$.[0].field.name").value("East Field"))
+                .andExpect(jsonPath("$.[1]").exists())
+                .andExpect(jsonPath("$.[2]").exists())
+                .andExpect(jsonPath("$.[3]").exists())
+                .andExpect(jsonPath("$.[4]").exists())
+                .andExpect(jsonPath("$.[5]").exists())
+                .andExpect(jsonPath("$.[6]").exists())
+                .andExpect(jsonPath("$.[7]").exists())
+                .andExpect(jsonPath("$.[10]").doesNotExist());
     }
 
     @Test
     public void testCreateCrop() throws Exception {
-        String cropJson = "{\"type\": \"Corn\"}";
+        List<Field> fields = getFieldRepository().findAll();
+        List<Season> seasons = getSeasonRepository().findAll();
+        String cropJson = """
+        {
+          "type": "Rice",
+          "quantity": 200,
+          "operation": "planted",
+          "field": {
+            "id": %s
+          },
+          "season": {
+            "id": %s
+          }
+        }
+        """;
 
-        mockMvc.perform(post("/api/crops")
+        final String formatedCrop = String.format(cropJson, fields.get(0).getId(), seasons.get(0).getId());
+        getMockMvc().perform(post("/api/crops")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(cropJson))
+                        .content(formatedCrop))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.type").value("Corn"))
-                .andExpect(jsonPath("$.[1]").doesNotHaveJsonPath());
+                .andExpect(jsonPath("$.type").value("Rice"))
+                .andExpect(jsonPath("$.[10]").doesNotExist());
     }
+
 }

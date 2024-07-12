@@ -15,7 +15,6 @@ public class Field {
     private String name;
     private double plantingArea;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "farm_id")
     private Farm farm;

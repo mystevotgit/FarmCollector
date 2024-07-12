@@ -1,5 +1,6 @@
 package com.example.farmCollector.entity;
 
+import com.example.farmCollector.enums.FarmOperation;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,10 +12,9 @@ public class Crop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String type;
-    private double actualProduct;
-    private double expectedProduct;
+    private double quantity;
+    private FarmOperation operation;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "field_id")
     private Field field;
