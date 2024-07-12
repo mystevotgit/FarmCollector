@@ -65,16 +65,14 @@ public class ReportControllerTest {
         Crop crop = new Crop();
         crop.setSeason(season);
         crop.setType("Corn");
-        crop.setActualProduct(100);
-        crop.setExpectedProduct(99);
+        crop.setQuantity(100);
         crop.setField(field);
         cropRepository.save(crop);
 
         mockMvc.perform(get("/api/reports/farm/" + farm.getId() + "/season/" + season.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.Farm1.season1.[0].actualProduct").value("100.0"))
-                .andExpect(jsonPath("$.Farm1.season1.[0].expectedProduct").value("99.0"))
+                .andExpect(jsonPath("$.Farm1.season1.[0].quantity").value("100.0"))
                 .andExpect(jsonPath("$.Farm1.season1.[1]").doesNotHaveJsonPath());
 
     }
@@ -98,16 +96,16 @@ public class ReportControllerTest {
         Crop crop = new Crop();
         crop.setSeason(season);
         crop.setType("Corn");
-        crop.setActualProduct(100);
-        crop.setExpectedProduct(99);
+        crop.setQuantity(100);
         crop.setField(field);
         cropRepository.save(crop);
 
+        System.out.println(
         mockMvc.perform(get("/api/reports/crops/season/" + season.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.Corn.season1.[0].actualProduct").value("100.0"))
-                .andExpect(jsonPath("$.Corn.season1.[0].expectedProduct").value("99.0"))
-                .andExpect(jsonPath("$.Corn.season1.[1]").doesNotHaveJsonPath());
+                .andExpect(jsonPath("$.Corn.season1.[0].quantity").value("100.0"))
+                .andExpect(jsonPath("$.Corn.season1.[1]").doesNotHaveJsonPath())
+                .andReturn().getResponse().getContentAsString());
     }
 }
