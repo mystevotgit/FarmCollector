@@ -1,18 +1,17 @@
 package com.example.farmCollector.controller;
 
 import com.example.farmCollector.dto.CropDto;
-import com.example.farmCollector.dto.FarmInfoDto;
-import com.example.farmCollector.entity.Crop;
+import com.example.farmCollector.dto.FarmReportSearchCriteria;
 import com.example.farmCollector.service.FarmReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api/reports")
@@ -20,23 +19,18 @@ public class ReportController {
     @Autowired
     private FarmReportService farmReportService;
 
-    @GetMapping("/farm/{farmId}/season/{seasonId}")
-    public ResponseEntity<Map<String, Map<String, Set<CropDto>>>> getReportForFarm(@PathVariable Long farmId, @PathVariable Long seasonId) {
-        return ResponseEntity.ok(farmReportService.getReportForFarm(farmId, seasonId));
-    }
-    @GetMapping("/farm")
-    public ResponseEntity<Map<String, FarmInfoDto>> getReportForFarm() {
-        return ResponseEntity.ok(farmReportService.getFarmsReport());
-    }
+    @GetMapping("/search")
+    public Map<String, Object> searchFarmReports(FarmReportSearchCriteria criteria, Pageable pageable) {
+        final int totalPages = farmReportService.countSearchFarmReports(criteria, pageable);
+        Map<String, Map<String, List<CropDto>>> groupedResults = farmReportService.searchFarmReports(criteria, pageable);
 
-    @GetMapping("/farm/search")
-    public ResponseEntity<Map<String, FarmInfoDto>> searchReport() {
-        return ResponseEntity.ok(farmReportService.getFarmsReport());
-    }
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", groupedResults);
+        response.put("currentPage", pageable.getPageNumber());
+        response.put("totalGroups", groupedResults.size());
+        response.put("totalPages", totalPages);
 
-    @GetMapping("/crops/season/{seasonId}")
-    public ResponseEntity<Map<String, Map<String, Set<Crop>>>> getReportForCrops(@PathVariable Long seasonId) {
-        return ResponseEntity.ok(farmReportService.getReportForCrops(seasonId));
+        return response;
     }
 
 }

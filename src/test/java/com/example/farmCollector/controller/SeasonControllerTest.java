@@ -8,27 +8,30 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class FarmControllerTest extends AbstractControllerTest {
+class SeasonControllerTest extends AbstractControllerTest {
 
     @Test
-    public void testGetAllFarms() throws Exception {
-
-        getMockMvc().perform(get("/api/farms"))
+    void getAllSeasons() throws Exception {
+        getMockMvc().perform(get("/api/seasons"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.[0].name").value("Tropic Farm"))
+                .andExpect(jsonPath("$.[0].name").value("Summer 2024"))
                 .andExpect(jsonPath("$.[1].name").exists())
                 .andExpect(jsonPath("$.[5]").doesNotExist());
     }
 
     @Test
-    public void testCreateFarm() throws Exception {
-        String farmJson = "{\"name\": \"MyFarm\"}";
+    void createSeason() throws Exception {
+        String seasonJson = """
+                {
+                    "name": "Hamarthan 2024"
+                }
+                """;
 
-        getMockMvc().perform(post("/api/farms")
+        getMockMvc().perform(post("/api/seasons")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(farmJson))
+                        .content(seasonJson))
                 .andExpect(status().isOk());
-        assertEquals(3, getFarmRepository().findAll().size());
+        assertEquals(4, getSeasonRepository().findAll().size());
     }
 }

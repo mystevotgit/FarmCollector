@@ -2,13 +2,13 @@
 
 ## Introduction
 
-FarmCollector is a Spring Boot application that helps farmers collect and report data on crops planted and harvested for each field in their farm across different seasons. The application includes endpoints for managing farms, fields, crops, and seasons, and provides reports comparing expected vs actual crop yields.
+FarmCollector is a Spring Boot application that helps farmers collect and report data on crops planted and harvested for each field in their farm across different seasons. The application includes endpoints for managing farms, fields, crops, and seasons, and provides reports comparing harvested vs planted crop yields.
 
 ## Features
 
 - Manage farms, fields, crops, and seasons
 - Collect data on planting and harvesting
-- Generate reports on expected vs actual crop yields
+- Generate reports on expected(harvested) vs actual(planted) crop yields
 - Simple text-based reports accessible via browser
 - API documentation using Swagger
 
@@ -16,6 +16,14 @@ FarmCollector is a Spring Boot application that helps farmers collect and report
 
 - Java 17
 - Maven
+
+## Technologies
+
+- Java 17
+- Spring Boot 3.3.1
+- H2 Database
+- Swagger for API documentation
+
 
 ## Getting Started
 
@@ -70,8 +78,8 @@ The application will be available at http://localhost:8080.
           "name": "Field1",
           "plantingArea": 100.0,
           "farm": {
-                    "id": 1
-                  }
+            "id": 1
+          }
         }
       ```
 ### Crop Endpoints
@@ -89,14 +97,14 @@ The application will be available at http://localhost:8080.
     ```json
      {
        "type": "Corn",
-       "expectedProduct": 50.0,
-       "actualProduct": 45.0,
+       "quantity": 50.0,
+       "operation": "planted",
        "field": {
-                  "id": 1
-                },
+         "id": 1
+       },
        "season": {
-                   "id": 1
-                 }
+         "id": 1
+       }
      }
     ```
 ### Season Endpoints
@@ -119,15 +127,20 @@ The application will be available at http://localhost:8080.
 
 ### Report Endpoints
 
-- Get Report for Farm by Season
-  - URL: /api/reports/farm/{farmId}/season/{seasonId}
-  - Method: GET
-  - Description: Generate a report comparing expected vs actual crop yields for a specific farm and season.
-  
-- Get Report for Crops by Season
-  - URL: /api/reports/crops/season/{seasonId}
-  - Method: GET
-  - Description: Generate a report comparing expected vs actual crop yields for all farms by crop type for a specific season.
+- Search Farm Reports
+  - GET /api/reports/search
+    - Request Parameters:
+      - farmId (optional)
+      - seasonId (optional)
+      - fieldId (optional)
+      - groupBy (optional: "farm", "season", "crop")
+      - page (optional: default is 0)
+      - size (optional: default is 10)
+      - example
+        ```bash
+        http://localhost:8080/api/reports/search?seasonId=1&farmId=1&fieldId=1&groupBy=crop&page=0&size=10
+        - ```
+  - Some sample data has been set up in a post-Construct method to be saved in the database whenever the application is started for live testing purpose.
 
 ## API Documentation
 Swagger UI is available at http://localhost:8080/swagger-ui.html/ for detailed API documentation.

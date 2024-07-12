@@ -13,7 +13,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.PostMapping;
 
 @SpringBootApplication
 public class FarmCollectorApplication {
@@ -32,7 +31,7 @@ public class FarmCollectorApplication {
 	private CropRepository cropRepository;
 
 	@PostConstruct
-	public void init () {
+	public void seedData () {
 		Season season = new Season();
 		season.setName("Summer 2024");
 		season = seasonRepository.save(season);
@@ -68,7 +67,7 @@ public class FarmCollectorApplication {
 		Crop crop = new Crop();
 		crop.setSeason(season);
 		crop.setType("Corn");
-		crop.setOperation(FarmOperation.PLANT);
+		crop.setOperation(FarmOperation.planted);
 		crop.setQuantity(100);
 		crop.setField(field);
 		cropRepository.save(crop);
@@ -76,7 +75,7 @@ public class FarmCollectorApplication {
 		Crop crop2 = new Crop();
 		crop2.setSeason(season2);
 		crop2.setType("Yam");
-		crop2.setOperation(FarmOperation.PLANT);
+		crop2.setOperation(FarmOperation.planted);
 		crop2.setQuantity(100);
 		crop2.setField(field2);
 		cropRepository.save(crop2);
@@ -84,7 +83,7 @@ public class FarmCollectorApplication {
 		Crop crop3 = new Crop();
 		crop3.setSeason(season);
 		crop3.setType("Rice");
-		crop3.setOperation(FarmOperation.PLANT);
+		crop3.setOperation(FarmOperation.planted);
 		crop3.setQuantity(100);
 		crop3.setField(field);
 		cropRepository.save(crop3);
@@ -92,7 +91,7 @@ public class FarmCollectorApplication {
 		Crop crop4 = new Crop();
 		crop4.setSeason(season3);
 		crop4.setType("Corn");
-		crop4.setOperation(FarmOperation.PLANT);
+		crop4.setOperation(FarmOperation.planted);
 		crop4.setQuantity(99);
 		crop4.setField(field);
 		cropRepository.save(crop4);
@@ -100,7 +99,7 @@ public class FarmCollectorApplication {
 		Crop cropH = new Crop();
 		cropH.setSeason(season);
 		cropH.setType("Corn");
-		cropH.setOperation(FarmOperation.HARVEST);
+		cropH.setOperation(FarmOperation.harvested);
 		cropH.setQuantity(108);
 		cropH.setField(field);
 		cropRepository.save(cropH);
@@ -108,7 +107,7 @@ public class FarmCollectorApplication {
 		Crop crop2H = new Crop();
 		crop2H.setSeason(season2);
 		crop2H.setType("Yam");
-		crop2H.setOperation(FarmOperation.HARVEST);
+		crop2H.setOperation(FarmOperation.harvested);
 		crop2H.setQuantity(102);
 		crop2H.setField(field2);
 		cropRepository.save(crop2H);
@@ -116,7 +115,7 @@ public class FarmCollectorApplication {
 		Crop crop3H = new Crop();
 		crop3H.setSeason(season);
 		crop3H.setType("Rice");
-		crop3H.setOperation(FarmOperation.HARVEST);
+		crop3H.setOperation(FarmOperation.harvested);
 		crop3H.setQuantity(105);
 		crop3H.setField(field);
 		cropRepository.save(crop3H);
@@ -124,7 +123,7 @@ public class FarmCollectorApplication {
 		Crop crop4H = new Crop();
 		crop4H.setSeason(season3);
 		crop4H.setType("Corn");
-		crop4H.setOperation(FarmOperation.HARVEST);
+		crop4H.setOperation(FarmOperation.harvested);
 		crop4H.setQuantity(89);
 		crop4H.setField(field);
 		cropRepository.save(crop4H);

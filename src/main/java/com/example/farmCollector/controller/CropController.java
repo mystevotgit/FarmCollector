@@ -1,7 +1,7 @@
 package com.example.farmCollector.controller;
 
-import com.example.farmCollector.entity.Crop;
-import com.example.farmCollector.repository.CropRepository;
+import com.example.farmCollector.dto.CropDto;
+import com.example.farmCollector.service.ApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,16 +11,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/crops")
 public class CropController {
+
     @Autowired
-    private CropRepository cropRepository;
+    private ApiService apiService;
 
     @GetMapping
-    public ResponseEntity<List<Crop>> getAllCrops() {
-        return ResponseEntity.ok(cropRepository.findAll());
+    public ResponseEntity<List<CropDto>> getAllCrops() {
+        return ResponseEntity.ok(apiService.getAllCrops());
     }
 
     @PostMapping
-    public ResponseEntity<Crop> createCrop(@RequestBody Crop crop) {
-        return ResponseEntity.ok(cropRepository.save(crop));
+    public ResponseEntity<CropDto> createCrop(@RequestBody CropDto crop) {
+        return ResponseEntity.ok(apiService.createCrop(crop));
     }
 }
